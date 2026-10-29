@@ -1,7 +1,7 @@
 import telebot 
 from config import token
-
-from logic import Pokemon
+from random import randint
+from logic import Pokemon, Wizard, Fighter
 
 bot = telebot.TeleBot(token) 
 
@@ -34,6 +34,14 @@ def attack_pok(message):
     else:
             bot.send_message(message.chat.id, "Чтобы атаковать, нужно ответить на сообщения того, кого хочешь атаковать")
 
+@bot.message_handler(commands=['feed'])
+def feed_pok(message):
+    if message.from_user.username in Pokemon.pokemons.keys():
+        pok = Pokemon.pokemons[message.from_user.username]
+        response = pok.feed()
+        bot.send_message(message.chat.id, response)
+    else:
+        bot.send_message(message.chat.id, "У тебя пока нет покемона.")
 
 bot.infinity_polling(none_stop=True)
 
